@@ -6,7 +6,7 @@ from flask_login import login_required, login_user, current_user, logout_user
 
 
 #Note Display route
-@app.route('/note')
+@app.route('/notes')
 def note_display():
     notes = Note.query.all()
     return render_template("notes.html", notes=notes)
@@ -28,23 +28,22 @@ def note_display():
 
 
 # Nate work here (Register route)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    form = UserInfoForm()
+    if request.method =='POST' and form.validate():
+        username = form.username.data
+        password = form.password.data
+        email = form.email.data
+        print("\n",username, password, email)
+        user = User(username, email, password)
+        #Adding into database
+        db.session.add(user)
+        db.session.commit()
+        #forming and sending welcome email via sendgrid
+        msg = Message(f"Thanks for signing up, {username}!", recipients=[email])
+        msg.body = ('Thanks for registering!')
+        msg.html = ('<h1>Welcome to the NZA LAw site!</h1>' '<p>You can now leave case notes after logging in.</p>')
 
 
 
