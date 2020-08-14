@@ -1,3 +1,5 @@
 nza_env
 .env
 NZA_CS_env
+nzalawenv
+app.db
