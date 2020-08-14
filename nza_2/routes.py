@@ -7,12 +7,17 @@ from flask_login import login_required, login_user, current_user, logout_user
 
 #Note Display route
 @app.route('/note')
+@login_required
 def note_display():
     notes = Note.query.all()
     return render_template("notes.html", notes=notes)
 
 # Cindy Work here (Retrieve route)
-
+@app.route('/notes/<int:note_id>')
+@login_required
+def note_detail(note_id):
+    note = Note.query.get_or_404(note_id)  # get_or404 throws and exception if your post_id does not exist, 404 is a clinet error
+    return render_template('note_detail.html',note=note)
 
 
 
