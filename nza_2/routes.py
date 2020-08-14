@@ -30,8 +30,6 @@ def note_detail(note_id):
 
 
 
-
-
 # Nate work here (Register route)
 
 
