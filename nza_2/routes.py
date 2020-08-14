@@ -49,17 +49,22 @@ def register():
 
 
 #  Asia work here (Login + Logout routes)
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    form = LoginForm()
+    if request.method == "POST" and form.validate():
+        email = form.email.data
+        password = form.password.data
+        logged_user = User.query.filter(User.email == email).first()
+        if logged_user and check_password_hash(logged_user.password, password):
+            login_user(logged_user)
+            return redirect(url_for('index'))
+        else:
+            return redirect(url_for('login'))
+    return render_template('login.html', form=form)
 
-
-
-
-
-
-
-
-
-
-
-
-
+@app.route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('index'))
 # Nibras Work below (Update + Delete)
