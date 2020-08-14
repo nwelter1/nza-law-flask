@@ -64,3 +64,32 @@ def note_display():
 
 
 # Nibras Work below (Update + Delete)
+@app.route('/notes/update/<int:post_id>', methods=['GET', 'POST'])
+@login_required
+def note_update(note_id):
+    note = Note.query.get_or_404(note_id)
+    update_form = NoteForm()
+
+    if request.method == 'NOTE' and update_form.validate():
+        case = update_form.case.data
+        case_notes = update_form.content.data
+        user_id = current_user.id
+        # Update case with case notes info
+        note.case = case
+        note.case_notes = case_notes
+        note.user_id = user_id
+
+        # Commit change to db
+        db.session.commit()
+        return redirect(url_for('note_update', note_id=note.id))
+
+    return render_template('note_update.html', update_form=update_form)
+
+
+@app.route('/posts/delete/<int:note_id>', methods=['POST'])
+@login_required
+def note_delete(note_id):
+    note = Note.query.get_or_404(note_id)
+    db.session.delete(note)
+    db.session.commit()
+    return redirect(url_for('home'))
